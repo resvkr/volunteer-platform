@@ -1,8 +1,0 @@
-{
-  "dependencies": {
-    "@stylexjs/stylex": "^0.17.5"
-  },
-  "devDependencies": {
-    "@stylexjs/eslint-plugin": "^0.17.5"
-  }
-}

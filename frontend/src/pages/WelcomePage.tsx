@@ -13,7 +13,7 @@ export default function WelcomePage() {
                 <Logo size="medium" sx={styles.img} />
 
                 <Container variant="white" sx={styles.buttonGroup}>
-                    <h1 color="colors.secondaryBlue">BénéLink</h1>
+                    <h1 {...stylex.props(styles.h1)}>BénéLink</h1>
                     <Button
                         to="/auth/login"
                         as={Link}

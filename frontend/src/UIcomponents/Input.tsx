@@ -16,7 +16,6 @@ const styles = stylex.create({
 
         outline: 'none',
         transition: 'border-color 0.3s ease',
-        alignItems: 'center',
         boxSizing: 'border-box',
         color: colors.primaryBrown,
         display: 'flex',
@@ -25,6 +24,9 @@ const styles = stylex.create({
     small: { width: '100px' },
     medium: { width: '200px' },
     large: { width: '200px' },
+    error: {
+        borderColor: 'red',
+    },
 })
 
 interface InputProps extends Omit<
