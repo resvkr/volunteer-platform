@@ -29,8 +29,4 @@ export class RegisterDto {
   @IsOptional()
   @IsString()
   dream?: string;
-
-  @IsOptional()
-  @IsString()
-  photoUrl?: string;
 }

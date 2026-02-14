@@ -7,17 +7,14 @@ const styles = stylex.create({
         borderColor: {
             default: colors.primaryYellow,
             ':hover': colors.primaryBrown,
-            ':focus': colors.primaryBrown,
         },
         borderRadius: '6px',
-
         borderStyle: 'solid',
-
         borderWidth: '3px',
 
         placeContent: 'center',
 
-        transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+        transition: 'all 0.2s ease',
 
         appearance: 'none',
 
@@ -33,47 +30,69 @@ const styles = stylex.create({
         position: 'relative',
         height: '20px',
         width: '20px',
-
-        '::before': {
-            transition: 'transform 0.2s ease-in-out',
-            backgroundColor: 'white',
-
-            clipPath:
-                'polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%)',
-            content: '""',
-            transform: 'scale(0)',
-            height: '12px',
-            width: '12px',
-        },
     },
 
-    checked: {
-        borderColor: colors.primaryYellow,
-        backgroundColor: colors.primaryYellow,
-        '::before': {
-            transform: 'scale(1)',
-        },
+    checkmark: {
+        transition: 'transform 0.2s ease-in-out',
+
+        backgroundColor: 'white',
+
+        clipPath:
+            'polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%)',
+        content: '""',
+
+        position: 'absolute',
+
+        transform: 'scale(0)',
+        height: '12px',
+        width: '12px',
+    },
+    checkmarkVisible: {
+        transform: 'scale(1)',
     },
 })
 
 interface CheckboxProps extends React.InputHTMLAttributes<HTMLInputElement> {
-    variant?: 'base' | 'checked'
     sx?: stylex.StyleXStyles
 }
 
 export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
-    ({ variant = 'base', sx, ...props }, ref) => {
+    ({ sx, checked, ...props }, ref) => {
         return (
-            <input
-                type="checkbox"
-                {...props}
-                ref={ref}
-                {...stylex.props(
-                    styles.base,
-                    variant === 'checked' && styles.checked,
-                    sx
-                )}
-            />
+            <div
+                style={{
+                    position: 'relative',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: '20px',
+                    height: '20px',
+                }}
+            >
+                <input
+                    type="checkbox"
+                    {...props}
+                    ref={ref}
+                    checked={checked}
+                    {...stylex.props(styles.base, sx)}
+                    style={{
+                        position: 'absolute',
+                        margin: 0,
+                        zIndex: 1,
+                    }}
+                />
+
+                <div
+                    {...stylex.props(
+                        styles.checkmark,
+                        checked && styles.checkmarkVisible
+                    )}
+                    style={{
+                        zIndex: 2,
+                        pointerEvents: 'none',
+                    }}
+                />
+            </div>
         )
     }
 )

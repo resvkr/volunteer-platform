@@ -64,13 +64,14 @@ export class AuthService {
         })
         .returning();
 
-      if (dto.photoUrl) {
-        await tx.insert(schema.userPhotos).values({
-          userId: newUser.id,
-          photoUrl: dto.photoUrl,
-          isMain: true,
-        });
-      }
+      const defaultPhoto =
+        'https://thumbs.dreamstime.com/b/purple-avatar-placeholder-profile-icon-vector-illustration-standard-perfect-your-project-310052808.jpg';
+
+      await tx.insert(schema.userPhotos).values({
+        userId: newUser.id,
+        photoUrl: defaultPhoto,
+        isMain: true,
+      });
 
       if (dto.isVolunteer) {
         await tx.insert(schema.volunteerProfiles).values({

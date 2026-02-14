@@ -6,10 +6,9 @@ export const UserSchema = z.object({
     lastName: z.string().min(2, 'Last name is too short'),
     email: z.string().email('Invalid email address'),
     password: z.string().min(8, 'Password is too short'),
-    confirmPassword: z.string(),
     city: z.string().min(1, 'City is required'),
     isVolunteer: z.boolean(),
-    dream: z.string().optional(),
+    dream: z.string().nullable().optional().or(z.literal('')),
 })
 
 export type FormData = z.infer<typeof UserSchema>

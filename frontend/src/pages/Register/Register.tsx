@@ -9,8 +9,11 @@ import { Background } from '../../UIcomponents/Background'
 import { UserSchema, type FormData } from './types'
 import FormField from '../../UIcomponents/FormField'
 import { zodResolver } from '@hookform/resolvers/zod'
+import api from '../../api/axios'
+import { useNavigate } from 'react-router-dom'
 
 export default function Register() {
+    const navigate = useNavigate()
     const {
         register,
         handleSubmit,
@@ -19,13 +22,33 @@ export default function Register() {
     } = useForm<FormData>({
         resolver: zodResolver(UserSchema),
         mode: 'onBlur',
+        defaultValues: {
+            isVolunteer: false,
+        },
     })
 
     const isVolunteer = watch('isVolunteer')
 
-    const onSubmit = (data: any) => {
-        console.log(data)
+    const onSubmit = async (data: FormData) => {
+        const requestData = {
+            ...data,
+            isVolunteer: !!data.isVolunteer,
+        }
+
+        try {
+            const response = await api.post('/auth/register', requestData)
+
+            const { access_token }: { access_token: string } = response.data
+
+            localStorage.setItem('access_token', access_token)
+
+            void navigate('/auth/login')
+        } catch (error) {
+            console.log(error)
+        }
     }
+
+    console.log('Помилки форми:', errors)
 
     return (
         <Background variant="img">
@@ -81,9 +104,10 @@ export default function Register() {
                             )}
                         >
                             <Checkbox
-                                variant={isVolunteer ? 'checked' : 'base'}
                                 {...register('isVolunteer')}
+                                checked={isVolunteer}
                             />
+
                             <span {...stylex.props(styles.label)}>
                                 I am a volunteer
                             </span>
