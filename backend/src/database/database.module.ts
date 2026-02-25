@@ -19,6 +19,6 @@ export const DRIZZLE = 'DRIZZLE'; // Константа для ін'єкції
       },
     },
   ],
-  exports: [DRIZZLE], // Дозволяємо іншим модулям використовувати базу
+  exports: [DRIZZLE],
 })
 export class DatabaseModule {}

@@ -1,13 +1,13 @@
 import * as stylex from '@stylexjs/stylex'
 import { useForm } from 'react-hook-form'
 import { colors } from '../../styles/tokens.stylex'
-import { Button } from '../../UIcomponents/Button'
-import { Checkbox } from '../../UIcomponents/Checkbox'
-import { Logo } from '../../UIcomponents/Logo'
-import { Container } from '../../UIcomponents/Container'
-import { Background } from '../../UIcomponents/Background'
+import { Button } from '../../components/Button'
+import { Checkbox } from '../../components/Checkbox'
+import { Logo } from '../../components/Logo'
+import { Container } from '../../components/Container'
+import { Background } from '../../components/Background'
 import { UserSchema, type FormData } from './types'
-import FormField from '../../UIcomponents/FormField'
+import FormField from '../../components/FormField'
 import { zodResolver } from '@hookform/resolvers/zod'
 import api from '../../api/axios'
 import { useNavigate } from 'react-router-dom'
@@ -19,6 +19,7 @@ export default function Register() {
         handleSubmit,
         watch,
         formState: { errors },
+        setError,
     } = useForm<FormData>({
         resolver: zodResolver(UserSchema),
         mode: 'onBlur',
@@ -43,12 +44,19 @@ export default function Register() {
             localStorage.setItem('access_token', access_token)
 
             void navigate('/auth/login')
-        } catch (error) {
-            console.log(error)
+        } catch (error: any) {
+            const errorMessage = error.response?.data?.message
+
+            if (errorMessage === 'User with this email already exists') {
+                setError('email', {
+                    type: 'server',
+                    message: 'User already exists',
+                })
+            } else {
+                console.log(error)
+            }
         }
     }
-
-    console.log('Помилки форми:', errors)
 
     return (
         <Background variant="img">

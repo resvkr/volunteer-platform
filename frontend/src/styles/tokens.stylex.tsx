@@ -6,6 +6,7 @@ export const colors = stylex.defineVars({
     primaryYellow: '#FADC7D',
     secondaryYellow: '#f5e7bb',
     primaryBrown: '#504932',
+    secondaryBrown: '#312705',
     white: '#ffffff',
     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
 })

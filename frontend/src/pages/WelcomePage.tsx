@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom'
 import * as stylex from '@stylexjs/stylex'
 import { colors } from '../styles/tokens.stylex'
-import { Button } from '../UIcomponents/Button'
-import { Logo } from '../UIcomponents/Logo'
-import { Container } from '../UIcomponents/Container'
-import { Background } from '../UIcomponents/Background'
+import { Button } from '../components/Button'
+import { Logo } from '../components/Logo'
+import { Container } from '../components/Container'
+import { Background } from '../components/Background'
 
 export default function WelcomePage() {
     return (
