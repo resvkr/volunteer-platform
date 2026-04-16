@@ -3,8 +3,10 @@ import { colors, radius } from '../styles/tokens.stylex'
 import { useState } from 'react'
 import { Button } from './Button'
 import { Icon } from './Icon'
+import { useNavigate } from 'react-router-dom'
 
 interface VolunteerCardProps {
+    id: number
     name: string
     avatar: string
     rating: string | number
@@ -12,12 +14,19 @@ interface VolunteerCardProps {
 }
 
 export const VolunteerCard = ({
+    id,
     name,
     avatar,
     rating,
     city,
 }: VolunteerCardProps) => {
     const [isHovered, setIsHovered] = useState(false)
+
+    const navigate = useNavigate()
+
+    const handleProfileClick = () => {
+        void navigate(`/profile/${id}`)
+    }
     return (
         <div
             {...stylex.props(
@@ -56,7 +65,9 @@ export const VolunteerCard = ({
                     isHovered && styles.expandedContentVisible
                 )}
             >
-                <Button variant="outlineBlue">View Profile</Button>
+                <Button variant="outlineBlue" onClick={handleProfileClick}>
+                    View Profile
+                </Button>
             </div>
         </div>
     )
@@ -65,12 +76,10 @@ export const VolunteerCard = ({
 const styles = stylex.create({
     postItem: {
         padding: '15px',
-
         borderColor: {
             default: 'none',
             ':hover': colors.secondaryBlue,
         },
-
         borderRadius: radius.medium,
         borderStyle: {
             default: 'none',
@@ -80,12 +89,9 @@ const styles = stylex.create({
             default: 'none',
             ':hover': '4px',
         },
-
         overflow: 'hidden',
         transition: 'all 0.5s cubic-bezier(0.23, 1, 0.32, 1)',
-
         alignItems: 'center',
-
         backgroundColor: colors.primaryYellow,
         boxShadow: {
             default: 'none',

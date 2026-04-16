@@ -1,16 +1,17 @@
 import * as stylex from '@stylexjs/stylex'
 import { useForm } from 'react-hook-form'
-import { colors } from '../../styles/tokens.stylex'
-import { Button } from '../../components/Button'
-import { Checkbox } from '../../components/Checkbox'
-import { Logo } from '../../components/Logo'
-import { Container } from '../../components/Container'
-import { Background } from '../../components/Background'
+import { colors } from '../../../styles/tokens.stylex'
+import { Button } from '../../../components/Button'
+import { Checkbox } from '../../../components/Checkbox'
+import { Logo } from '../../../components/Logo'
+import { Container } from '../../../components/Container'
+import { Background } from '../../../components/Background'
 import { UserSchema, type FormData } from './types'
-import FormField from '../../components/FormField'
+import FormField from '../../../components/FormField'
 import { zodResolver } from '@hookform/resolvers/zod'
-import api from '../../api/axios'
+import api from '../../../api/axios'
 import { useNavigate } from 'react-router-dom'
+import { useState } from 'react'
 
 export default function Register() {
     const navigate = useNavigate()
@@ -29,6 +30,7 @@ export default function Register() {
     })
 
     const isVolunteer = watch('isVolunteer')
+    const [loading, setLoading] = useState(false)
 
     const onSubmit = async (data: FormData) => {
         const requestData = {
@@ -37,6 +39,7 @@ export default function Register() {
         }
 
         try {
+            setLoading(true)
             const response = await api.post('/auth/register', requestData)
 
             const { access_token }: { access_token: string } = response.data
@@ -55,6 +58,8 @@ export default function Register() {
             } else {
                 console.log(error)
             }
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -137,7 +142,7 @@ export default function Register() {
                             type="submit"
                             sx={styles.registerButton}
                         >
-                            Register
+                            {loading ? 'Registering...' : 'Register'}
                         </Button>
                     </form>
                 </Container>

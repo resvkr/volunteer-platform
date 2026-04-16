@@ -11,6 +11,11 @@ body {
     src: url(./assets/Rubik-Bold.ttf) format('truetype');
 }
 
+@font-face {
+    font-family: 'Momo';
+    src: url(./assets/MomoSignature-Regular.ttf);
+}
+
 input,
 button,
 textarea,

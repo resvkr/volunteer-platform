@@ -2,6 +2,11 @@ import * as stylex from '@stylexjs/stylex'
 import { Icon } from './Icon'
 import { Button } from './Button'
 import { colors } from '../styles/tokens.stylex'
+import { useNavigate } from 'react-router-dom'
+import { useAuthStore } from '../store/authStore'
+import api from '../api/axios'
+import { useState } from 'react'
+import { Input } from './Input'
 
 const ICONS = [
     'fa-truck',
@@ -39,6 +44,43 @@ const pulse = stylex.keyframes({
 
 export const BecomeVolunteer = () => {
     const doubledIcons = [...ICONS, ...ICONS]
+    const navigate = useNavigate()
+
+    const [isStepTwo, setIsStepTwo] = useState(false)
+    const [dream, setDream] = useState('')
+    const [loading, setLoading] = useState(false)
+
+    const handleButtonClick = async () => {
+        if (!isStepTwo) {
+            setIsStepTwo(true)
+            return
+        }
+
+        if (!dream.trim()) {
+            alert('Please enter your dream before submitting.')
+            return
+        }
+
+        try {
+            setLoading(true)
+            const response = await api.patch('/users/become-volunteer', {
+                dream,
+            })
+            const { access_token } = response.data
+
+            useAuthStore.getState().setAuth(access_token)
+
+            api.defaults.headers.common['Authorization'] =
+                `Bearer ${access_token}`
+            setTimeout(() => {
+                navigate('/become-volunteer/success', { replace: true })
+            }, 100)
+        } catch (error) {
+            console.error('Error becoming volunteer:', error)
+        } finally {
+            setLoading(false)
+        }
+    }
 
     return (
         <div {...stylex.props(styles.base)}>
@@ -64,15 +106,38 @@ export const BecomeVolunteer = () => {
                     <span {...stylex.props(styles.yellowText)}>Invaluable</span>
                 </p>
                 <div {...stylex.props(styles.subText)}>
-                    <p {...stylex.props(styles.description)}>
-                        Join our team and start making diference tooday!
-                    </p>
+                    {!isStepTwo ? (
+                        <p {...stylex.props(styles.description)}>
+                            Join our team and start making difference today!
+                        </p>
+                    ) : (
+                        <div style={{ marginBottom: '20px', width: '300px' }}>
+                            <Input
+                                type="text"
+                                placeholder="Tell us about your dream..."
+                                value={dream}
+                                onChange={(e) => setDream(e.target.value)}
+                                style={{
+                                    padding: '12px',
+                                    borderRadius: '12px',
+                                    border: `4px solid ${colors.primaryYellow}`,
+                                    width: '100%',
+                                    outline: 'none',
+                                }}
+                            />
+                        </div>
+                    )}
                     <Button
+                        onClick={() => void handleButtonClick()}
                         variant="full"
                         size="large"
                         sx={styles.volunteerButton}
                     >
-                        Become a volunteer
+                        {loading
+                            ? 'Submitting...'
+                            : !isStepTwo
+                              ? 'Become a Volunteer'
+                              : 'Submit and Join'}
                     </Button>
                 </div>
             </div>

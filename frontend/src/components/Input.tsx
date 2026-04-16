@@ -29,7 +29,7 @@ const styles = stylex.create({
     },
     small: { width: '100px' },
     medium: { width: '200px' },
-    large: { width: '200px' },
+    large: { width: '420px' },
     error: {
         borderColor: 'red',
     },

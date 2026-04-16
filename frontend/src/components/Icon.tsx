@@ -2,7 +2,7 @@ import * as stylex from '@stylexjs/stylex'
 import { colors } from '../styles/tokens.stylex'
 
 interface IconProps {
-    variant?: 'yellow' | 'blue'
+    variant?: 'yellow' | 'blue' | 'red'
     size?: 'large' | 'medium' | 'small'
     sx?: stylex.StyleXStyles
     iconName: string
@@ -22,6 +22,7 @@ export const Icon = ({
 
         if (variant === 'yellow') s.color = colors.primaryYellow
         else if (variant === 'blue') s.color = colors.secondaryBlue
+        else if (variant === 'red') s.color = '#ff3a4e'
         else s.color = '#ffffff'
 
         if (size === 'large') s.fontSize = '60px'

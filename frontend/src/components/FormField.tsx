@@ -7,7 +7,7 @@ const fieldStyles = stylex.create({
         display: 'flex',
         justifyContent: 'center',
         position: 'relative',
-
+        maxWidth: '200px',
         width: '100%',
     },
     errorText: {
@@ -23,8 +23,10 @@ const fieldStyles = stylex.create({
 interface FormFieldProps {
     type: string
     placeholder: string
-    name: string
+    name: any
     register: UseFormRegister<any>
+    multiple?: boolean
+    accept?: string
     error?: FieldError
     sx?: stylex.StyleXStyles
     size?: 'small' | 'medium' | 'large'
@@ -37,7 +39,7 @@ export const FormField = ({
     register,
     error,
     sx,
-    size = 'large',
+    size = 'medium',
 }: FormFieldProps) => (
     <div {...stylex.props(fieldStyles.container, sx)}>
         <Input

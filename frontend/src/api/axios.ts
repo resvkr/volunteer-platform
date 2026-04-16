@@ -13,4 +13,14 @@ api.interceptors.request.use((config) => {
     return config
 })
 
+api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if (error.response && error.response.status === 401) {
+            window.location.href = '/unauthorized'
+        }
+        return Promise.reject(error instanceof Error ? error : new Error(error))
+    }
+)
+
 export default api

@@ -1,0 +1,83 @@
+.react-time-picker__wrapper {
+    background-color: white !important;
+    border-radius: 8px !important; /* Як у ваших інпутів */
+    padding: 10px !important;
+    font-family: inherit !important; /* Успадковує шрифт форми */
+    display: flex !important;
+    align-items: center !important;
+    width: 200px !important;
+    height: 44px !important;
+    /* Жовта рамка як у FormField */
+    border: 4px solid #fadc7d !important;
+    transition: border-color 0.3s ease-in-out !important;
+    /* Якщо використовуєте змінні StyleX: border: 3px solid #FFF !important; */
+}
+
+.react-time-picker__wrapper:hover {
+    border-color: #312705 !important; /* Залишаємо жовту рамку при наведенні */
+}
+
+/* 2. Стилізуємо саме текстове поле вводу */
+.react-time-picker__inputGroup__input {
+    color: #757575 !important; /* Сірий колір як у плейсхолдерах */
+    font-size: 16px !important;
+    font-weight: 500 !important;
+    outline: none !important;
+    border: none !important; /* Видаляємо рамку навколо цифр */
+    cursor: pointer !important;
+}
+
+/* 3. Прибираємо іконку "Годинник" (вона часто виглядає зайвою) */
+.react-time-picker__clock-button {
+    display: none !important;
+}
+
+/* 4. Прибираємо іконку "Очистити" (або робимо її менш помітною) */
+.react-time-picker__clear-button__icon {
+    stroke: #757575 !important;
+    display: none !important; /* Прибрати зовсім */
+}
+
+/* 5. Стилізація самого випадаючого меню годинника (якщо disableClock={false}) */
+.react-time-picker__clock {
+    background-color: white !important;
+    border-radius: 8px !important;
+    border: 1px solid #757575 !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2) !important;
+}
+
+.react-time-picker__wrapper,
+.react-date-picker__wrapper {
+    background-color: white !important;
+    border-radius: 8px !important; /* Як у ваших інпутів */
+    padding: 10px !important;
+    font-family: inherit !important; /* Успадковує шрифт форми */
+    display: flex !important;
+    align-items: center !important;
+    width: 200px !important;
+    height: 44px !important;
+    /* Жовта рамка як у FormField */
+    border: 4px solid #fadc7d !important;
+    transition: border-color 0.3s ease-in-out !important;
+}
+
+.react-time-picker__wrapper:hover,
+.react-date-picker__wrapper:hover {
+    border-color: #312705 !important;
+}
+
+/* Стилізація інпутів всередині */
+.react-time-picker__inputGroup__input,
+.react-date-picker__inputGroup__input {
+    color: #757575 !important;
+    font-size: 16px !important;
+    font-weight: 500 !important;
+    outline: none !important;
+    border: none !important;
+}
+
+/* Прибираємо зайві кнопки */
+.react-date-picker__button,
+.react-time-picker__button {
+    padding: 2px 4px !important;
+}

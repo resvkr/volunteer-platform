@@ -1,14 +1,19 @@
-import axios from 'axios'
-import { useEffect, useState } from 'react'
-import { Header } from '../components/Header'
+import api from '../../api/axios'
+import { useState } from 'react'
+import { Header } from '../../components/Header'
 import * as stylex from '@stylexjs/stylex'
-import { Icon } from '../components/Icon'
-import { colors } from '../styles/tokens.stylex'
-import NewsPreview from '../components/NewsPreview'
-import { QuoteBlock } from '../components/QuoteBlock'
-import Footer from '../components/Footer'
-import { Slider } from '../components/Slider'
-import { PostCard } from '../components/PostCard'
+import { Icon } from '../../components/Icon'
+import { colors } from '../../styles/tokens.stylex'
+import NewsPreview from '../../components/NewsPreview'
+import { QuoteBlock } from '../../components/QuoteBlock'
+import Footer from '../../components/Footer'
+import { Slider } from '../../components/Slider'
+import { PostCard } from '../../components/PostCard'
+import { MakeNewsBlock } from '../../components/MakeNewsBlock'
+import { useQuery } from '@tanstack/react-query'
+import { NavigateButtons } from '../../components/NavigateButtons'
+import { MakeRequestBlock } from '../../components/MakeRequestBlock'
+import { Background } from '../../components/Background'
 
 interface Category {
     id: number
@@ -34,53 +39,50 @@ const slideLeft = stylex.keyframes({
     to: { opacity: 1, transform: 'translateX(0)' },
 })
 
+const fetchPosts = async (categoryId: number | null) => {
+    const { data } = await api.get<Post[]>('/posts/category', {
+        params: { categoryId },
+    })
+    return data
+}
+
+const fetchCategories = async () => {
+    const { data } = await api.get<Category[]>('/categories')
+    return data
+}
+
 export default function VolunteerDashboard() {
-    const [categories, setCategories] = useState<Category[]>([])
-    const [posts, setPosts] = useState<Post[]>([])
+    const [isHovered, setIsHovered] = useState<number | null>(null)
     const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
         null
     )
 
-    const [isHovered, setIsHovered] = useState<number | null>(null)
+    const { data: categories = [], isLoading: isCatsLoading } = useQuery({
+        queryKey: ['categories'],
+        queryFn: fetchCategories,
+    })
 
-    useEffect(() => {
-        const fetchCategories = async () => {
-            try {
-                const response = await axios.get<Category[]>(
-                    `${import.meta.env.VITE_API_URL}/volunteer-dashboard/categories`
-                )
-                setCategories(response.data)
-            } catch (error) {
-                console.log(error)
-            }
-        }
-        void fetchCategories()
-    }, [])
-
-    useEffect(() => {
-        const fetchPosts = async () => {
-            try {
-                const response = await axios.get<Post[]>(
-                    `${import.meta.env.VITE_API_URL}/volunteer-dashboard/posts`,
-                    {
-                        params: { categoryId: selectedCategoryId },
-                    }
-                )
-                setPosts(response.data)
-            } catch (error) {
-                console.log(error)
-            }
-        }
-        void fetchPosts()
-    }, [selectedCategoryId])
+    const { data: posts = [], isLoading: isPostsLoading } = useQuery({
+        queryKey: ['posts', selectedCategoryId],
+        queryFn: () => fetchPosts(selectedCategoryId),
+    })
 
     const selectedCategory = categories.find(
         (cat) => cat.id === selectedCategoryId
     )
     const categoryName = selectedCategory ? selectedCategory.name : 'All'
 
+    if (isCatsLoading)
+        return (
+            <Background variant="img">
+                {' '}
+                <div style={{ color: 'white' }}>Loading...</div>
+            </Background>
+        )
+
     return (
         <div {...stylex.props(styles.pageWrapper)}>
+            <NavigateButtons />
             <Header />
 
             <div className="categories-list">
@@ -130,14 +132,27 @@ export default function VolunteerDashboard() {
                     : 'New Requests'}
             </h2>
 
-            <Slider
-                key={selectedCategoryId ?? 'all'}
-                items={posts}
-                itemsPerPage={4}
-                renderItem={(post) => <PostCard post={post} />}
-            />
+            {isPostsLoading ? (
+                <div {...stylex.props(styles.statusMessage)}>
+                    Loading posts...
+                </div>
+            ) : posts.length === 0 ? (
+                <div {...stylex.props(styles.statusMessage, styles.noPosts)}>
+                    <Icon variant="blue" size="medium" iconName="info" />
+                    <p>No posts available in this category yet.</p>
+                </div>
+            ) : (
+                <Slider
+                    key={selectedCategoryId ?? 'all'}
+                    items={posts}
+                    itemsPerPage={4}
+                    renderItem={(post) => <PostCard post={post} />}
+                />
+            )}
+            <MakeRequestBlock />
             <QuoteBlock />
             <NewsPreview />
+            <MakeNewsBlock />
             <Footer />
         </div>
     )
@@ -154,6 +169,30 @@ const styles = stylex.create({
     rightArm: {
         transform: 'rotate(-62deg)',
     },
+    statusMessage: {
+        borderRadius: '20px',
+        gap: '15px',
+
+        marginInline: '20px',
+        paddingBlock: '80px',
+        paddingInline: '20px',
+        alignItems: 'center',
+
+        backgroundColor: '#EBEEF6', // щоб збігалося з фоном слайдера
+        color: colors.primaryBlue,
+
+        display: 'flex',
+
+        flexDirection: 'column',
+
+        fontSize: '1.2rem',
+        textAlign: 'center',
+    },
+    noPosts: {
+        color: colors.primaryBrown,
+        fontStyle: 'italic',
+        opacity: 0.8,
+    },
     leftArm: {
         transform: 'rotate(62deg)',
     },
@@ -168,6 +207,7 @@ const styles = stylex.create({
         bottom: 0,
         left: '50%',
     },
+
     h2: {
         animationDuration: '2s',
         animationName: slideLeft,

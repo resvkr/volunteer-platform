@@ -14,14 +14,14 @@ const wave = stylex.keyframes({
 export default function NewsPreview() {
     const navigate = useNavigate()
 
-    const handleClick = async () => {
-        await navigate('/news/dashboard')
+    const handleClick = () => {
+        void navigate('/news/dashboard')
     }
     return (
         <div {...stylex.props(styles.mainContainer)}>
             <div {...stylex.props(styles.upContent)}>
                 <SpeechBubble text="Stay in the loop! Check out our latest news and useful content" />
-                <div onClick={void handleClick()}>
+                <div onClick={handleClick}>
                     <NewsLink />
                 </div>
             </div>

@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { Icon } from './Icon'
 import { Button } from './Button'
 import { colors, radius } from '../styles/tokens.stylex'
+import { useNavigate } from 'react-router-dom'
 
 interface Post {
     id: number
@@ -14,7 +15,11 @@ interface Post {
 
 export const PostCard = ({ post }: { post: Post }) => {
     const [isHovered, setIsHovered] = useState(false)
+    const navigate = useNavigate()
 
+    const handleDetailsClick = () => {
+        void navigate(`/requests/details/${post.id}`)
+    }
     return (
         <div
             {...stylex.props(
@@ -50,7 +55,12 @@ export const PostCard = ({ post }: { post: Post }) => {
                 )}
             >
                 <p {...stylex.props(styles.description)}>{post.description}</p>
-                <Button variant="outlineBlue">Contact Now</Button>
+                <Button
+                    variant="outlineBlue"
+                    onClick={() => handleDetailsClick()}
+                >
+                    View Details
+                </Button>
             </div>
         </div>
     )

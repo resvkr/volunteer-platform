@@ -7,7 +7,7 @@ export const NewsLink = () => {
         <div {...stylex.props(styles.whiteBlock)}>
             <img src="/src/assets/city.png" {...stylex.props(styles.img)} />
 
-            <p {...stylex.props(styles.text)}>Hot News</p>
+            <p {...stylex.props(styles.text)}>Latest Stories</p>
         </div>
     )
 }

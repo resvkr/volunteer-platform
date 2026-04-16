@@ -1,16 +1,17 @@
 import { useEffect, useState } from 'react'
-import { BeneLinkQuote } from '../components/BeneLinkQuote'
-import { Header } from '../components/Header'
-import { MakeRequestBlock } from '../components/MakeRequestBlock'
-import { Slider } from '../components/Slider'
-import axios from 'axios'
-import { VolunteerCard } from '../components/VolunteerCard'
-import { BecomeVolunteer } from '../components/BecomeVolunteer'
+import { BeneLinkQuote } from '../../components/BeneLinkQuote'
+import { Header } from '../../components/Header'
+import { MakeRequestBlock } from '../../components/MakeRequestBlock'
+import { Slider } from '../../components/Slider'
+import api from '../../api/axios'
+import { VolunteerCard } from '../../components/VolunteerCard'
+import { BecomeVolunteer } from '../../components/BecomeVolunteer'
 import * as stylex from '@stylexjs/stylex'
-import { Icon } from '../components/Icon'
-import { colors } from '../styles/tokens.stylex'
-import NewsPreview from '../components/NewsPreview'
-import Footer from '../components/Footer'
+import { Icon } from '../../components/Icon'
+import { colors } from '../../styles/tokens.stylex'
+import NewsPreview from '../../components/NewsPreview'
+import Footer from '../../components/Footer'
+import { NavigateButtons } from '../../components/NavigateButtons'
 
 const heartBeat = stylex.keyframes({
     '0%': { opacity: 0.8, transform: 'scale(1)' },
@@ -37,7 +38,7 @@ export default function UserDashboard() {
     useEffect(() => {
         const getVolunteers = async () => {
             try {
-                const responce = await axios.get<Volunteers[]>(
+                const responce = await api.get<Volunteers[]>(
                     `${import.meta.env.VITE_API_URL}/volunteers`
                 )
                 setVolunteers(responce.data)
@@ -51,6 +52,7 @@ export default function UserDashboard() {
     return (
         <>
             <Header />
+            <NavigateButtons />
             <BeneLinkQuote />
             <MakeRequestBlock />
             <div {...stylex.props(styles.helpers)}>
@@ -72,9 +74,10 @@ export default function UserDashboard() {
             </div>
             <Slider
                 items={volunteers}
-                itemsPerPage={5}
+                itemsPerPage={4}
                 renderItem={(vol) => (
                     <VolunteerCard
+                        id={vol.id}
                         key={vol.id}
                         name={`${vol.firstName}`}
                         avatar={vol.photo || '/default-avatar.png'}

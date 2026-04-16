@@ -8,12 +8,12 @@ export const styles = stylex.create({
         flexDirection: 'column',
         justifyContent: 'center',
         position: 'relative',
-        height: '100vh',
+        minHeight: '100vh',
         width: '100vw',
     },
 
     color: {
-        color: colors.primaryBlue,
+        backgroundColor: colors.primaryBlue,
     },
 
     img: {

@@ -1,7 +1,6 @@
 import * as stylex from '@stylexjs/stylex'
 import { colors } from '../styles/tokens.stylex'
 import { Logo } from './Logo'
-import { Icon } from './Icon'
 
 interface HeaderProps {
     sx?: stylex.StyleXStyles
@@ -28,30 +27,6 @@ export const Header = ({ sx }: HeaderProps) => {
                 <span {...stylex.props(styles.logoText, styles.link)}>
                     Link
                 </span>
-            </div>
-
-            <div {...stylex.props(styles.navigateButtons)}>
-                <div {...stylex.props(styles.iconWrapper)}>
-                    <Icon
-                        variant="yellow"
-                        size="medium"
-                        iconName="fa-regular fa-search"
-                    />
-                </div>
-                <div {...stylex.props(styles.iconWrapper)}>
-                    <Icon
-                        variant="yellow"
-                        size="medium"
-                        iconName="fa-regular fa-message"
-                    />
-                </div>
-                <div {...stylex.props(styles.iconWrapper)}>
-                    <Icon
-                        variant="yellow"
-                        size="medium"
-                        iconName="fa-regular fa-circle-user"
-                    />
-                </div>
             </div>
         </header>
     )
@@ -115,39 +90,5 @@ const styles = stylex.create({
 
         animationName: slideLeft,
         animationTimingFunction: 'cubic-bezier(0.23, 1, 0.32, 1)',
-    },
-    navigateButtons: {
-        gap: '20px',
-
-        alignSelf: 'flex-start',
-
-        display: 'flex',
-
-        position: 'sticky',
-
-        zIndex: 10000,
-
-        marginLeft: 'auto',
-        marginRight: '50px',
-
-        marginTop: '20px',
-        top: 0,
-    },
-    iconWrapper: {
-        borderRadius: '50%',
-
-        transition: 'all 0.3s ease-in-out',
-        alignItems: 'center',
-        cursor: 'pointer',
-        display: 'flex',
-        filter: {
-            default: 'drop-shadow(0 0 0px transparent)',
-            ':hover': `drop-shadow(0 0 12px ${colors.primaryYellow})`,
-        },
-        justifyContent: 'center',
-        transform: {
-            default: 'scale(1)',
-            ':hover': 'scale(1.1) translateY(-2px)',
-        },
     },
 })

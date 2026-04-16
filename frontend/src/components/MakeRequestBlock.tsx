@@ -2,6 +2,7 @@ import * as stylex from '@stylexjs/stylex'
 import { colors } from '../styles/tokens.stylex'
 import { Button } from './Button'
 import { Icon } from './Icon'
+import { useNavigate } from 'react-router-dom'
 
 const reveal = stylex.keyframes({
     '0%': {
@@ -23,6 +24,12 @@ const float = stylex.keyframes({
 })
 
 export const MakeRequestBlock = () => {
+    const navigate = useNavigate()
+
+    const handleCreateRequest = () => {
+        navigate('/requests/create')
+    }
+
     return (
         <section {...stylex.props(styles.container)}>
             <div {...stylex.props(styles.card)}>
@@ -34,7 +41,11 @@ export const MakeRequestBlock = () => {
                         small.
                     </p>
                     <div {...stylex.props(styles.buttonWrapper)}>
-                        <Button variant="full" sx={styles.btnCustom}>
+                        <Button
+                            variant="full"
+                            sx={styles.btnCustom}
+                            onClick={handleCreateRequest}
+                        >
                             Create a Request
                         </Button>
                     </div>

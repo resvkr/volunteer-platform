@@ -1,16 +1,17 @@
 import * as stylex from '@stylexjs/stylex'
 import { useForm } from 'react-hook-form'
-import { colors } from '../../styles/tokens.stylex'
-import { Button } from '../../components/Button'
-import { Logo } from '../../components/Logo'
-import { Container } from '../../components/Container'
-import { Background } from '../../components/Background'
+import { colors } from '../../../styles/tokens.stylex'
+import { Button } from '../../../components/Button'
+import { Logo } from '../../../components/Logo'
+import { Container } from '../../../components/Container'
+import { Background } from '../../../components/Background'
 import { UserSchema, type FormData } from './types'
-import FormField from '../../components/FormField'
+import FormField from '../../../components/FormField'
 import { zodResolver } from '@hookform/resolvers/zod'
-import api from '../../api/axios'
-import { useAuthStore } from '../../store/authStore'
+import api from '../../../api/axios'
+import { useAuthStore } from '../../../store/authStore'
 import { useNavigate } from 'react-router-dom'
+import { useState } from 'react'
 
 export default function Login() {
     const navigate = useNavigate()
@@ -24,6 +25,7 @@ export default function Login() {
         resolver: zodResolver(UserSchema),
         mode: 'onBlur',
     })
+    const [loading, setLoading] = useState(false)
 
     const onSubmit = async (data: FormData) => {
         const requestData = {
@@ -31,6 +33,7 @@ export default function Login() {
         }
 
         try {
+            setLoading(true)
             const response = await api.post('/auth/login', requestData)
 
             const { access_token }: { access_token: string } = response.data
@@ -58,6 +61,8 @@ export default function Login() {
             } else {
                 console.log(error)
             }
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -86,8 +91,13 @@ export default function Login() {
                             register={register}
                             error={errors.password}
                         />
-                        <Button variant="full" size="medium" type="submit">
-                            Login
+                        <Button
+                            variant="full"
+                            size="medium"
+                            type="submit"
+                            disabled={loading}
+                        >
+                            {loading ? 'Logging in...' : 'Login'}
                         </Button>
                     </form>
                 </Container>

@@ -2,7 +2,7 @@ import { Injectable, Inject } from '@nestjs/common';
 import { DRIZZLE } from '../../database/database.module';
 import * as schema from '../../database/schema';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
-import { eq, and } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 
 @Injectable()
 export class VolunteersService {
@@ -15,21 +15,18 @@ export class VolunteersService {
         firstName: schema.users.firstName,
         lastName: schema.users.lastName,
         city: schema.users.city,
-        dream: schema.volunteerProfiles.dream,
-        rating: schema.volunteerProfiles.averageRating,
-        photo: schema.userPhotos.photoUrl,
+
+        photo: schema.users.photoUrl,
+
+        dream: schema.userProfiles.dream,
+        rating: schema.userProfiles.averageRating,
+        reviewCount: schema.userProfiles.reviewCount,
       })
       .from(schema.users)
       .innerJoin(
-        schema.volunteerProfiles,
-        eq(schema.users.id, schema.volunteerProfiles.userId),
+        schema.userProfiles,
+        eq(schema.users.id, schema.userProfiles.userId),
       )
-      .leftJoin(
-        schema.userPhotos,
-        and(
-          eq(schema.users.id, schema.userPhotos.userId),
-          eq(schema.userPhotos.isMain, true),
-        ),
-      );
+      .where(eq(schema.users.role, 3));
   }
 }
